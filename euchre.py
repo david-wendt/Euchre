@@ -1,15 +1,9 @@
-from collections import namedtuple
 import random
 import numpy as np # I use this only for an np.argmax call, 
 # which in theory we could find another way to do or implement by hand with a few lines - DW
 
-
-N_PLAYERS = 4
-HAND_SIZE = 5
-SUITS = ['Hearts', 'Diamonds', 'Clubs', 'Spades']
-RANKS = ['9', '10', 'Jack', 'Queen', 'King', 'Ace']
-N_RANKS = len(RANKS)
-Card = namedtuple('Card', ('suit', 'rank'))
+from card_info import * 
+import display as dsp
 
 class Player:
     def __init__(self, name):
@@ -17,8 +11,9 @@ class Player:
         self.hand = []
 
     def play_card(self, trump_suit, trick):
+        # card_idx = input("Select a card by its number: ")
         raise NotImplementedError()
-        return card
+        # return card
 
 class Euchre:
     def __init__(self, player_names=None):
@@ -72,6 +67,9 @@ class Euchre:
 
     def get_current_player(self):
         return self.current_player_idx, self.current_player
+    
+    def get_players(self):
+        return self.players
 
     def deal_cards(self):
         for _ in range(HAND_SIZE):
@@ -82,18 +80,23 @@ class Euchre:
     def check_validity(self, trick, card_played):
         raise NotImplementedError()
 
-    def play_trick(self):
+    def play_trick(self, display=False):
         trick = [None for _ in range(N_PLAYERS)]
         for _ in range(N_PLAYERS):
+            if display: 
+                dsp.display_trick(self.players, trick)
+
             player_idx,player = self.get_current_player()
-            card_played = player.play_card(self.trump_suit, trick, 
-                                                 self.hand_history) 
-                # This line will throw an error as implemented. We need to figure out 
+            card_played = player.play_card(self.trump_suit, trick) # , self.hand_history) 
+                # The last arg above will throw an error as implemented. We need to figure out 
                 # what info needs to be passed to the player besides just the current trick
 
             assert self.check_validity(trick, card_played)
             trick[player_idx] = card_played
             self.increment_current_player()
+
+        if display: 
+            dsp.display_trick(self.players, trick)
         self.tricks_won[np.argmax([self.card_value(card) for card in trick])] += 1
 
     def is_trump(self, card: Card):
@@ -107,9 +110,10 @@ class Euchre:
         return card.suit == self.trump_suit or is_little_jack
 
     def card_value(self, card):
-        # I'd argue that this, and the constants I defined above,
+        # I'd argue that this, 
         # as well as maybe even is_trump (with a trump_suit arg added)
-        # could go in a separate file/class which just covers basic
+        # could go in the separate file card_info.py, 
+        # possibly in a new class which just covers basic
         # card game logic, and then this class can be kept separate
         # to actually run the game and euchre-specific/trick-taking logic - DW
 
@@ -131,19 +135,15 @@ class Euchre:
         # IF card is the little jack (above all trumps, but not big jack)
         return 2 * N_RANKS 
     
-    def display(self):
-        for player in self.players:
-            print(player.name, player.hand)
-
 
 if __name__ == '__main__':
     # Usage example:
     player_names = [f'Player {i}' for i in range(1,5)]
     game = Euchre(player_names=player_names)
-    game.display()
+    dsp.display_all_hands(game.get_players())
 
-    # # Play a trick
-    # game.play_trick()
+    # Play a trick
+    game.play_trick(display=True)
 
     # # Determine the winner of the trick
     # print("Trick winner:", game.trick_winner[0].name)
