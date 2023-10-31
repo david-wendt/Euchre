@@ -16,10 +16,14 @@ def find_led_card(trick):
         prev,curr = prev_curr_pairs[i]
         if prev is None and curr is not None:
             return curr
-    raise Exception("Should never get here... Trick is as follows:" + str(trick))
+    
+    return None
 
 def check_validity(trick, card_played, hand):
     led_card = find_led_card(trick)
+    if led_card is None: 
+        return True
+
     if card_played.suit == led_card.suit:
         return True 
     

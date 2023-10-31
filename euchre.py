@@ -21,6 +21,8 @@ class Player:
             raise QuitGameException()
         if card_str not in [str(i+1) for i in range(len(hand_rep))]:
             return -1
+        
+        return int(card_str) - 1
 
     def get_manual_card_choice(self):
         card_idx = self.card_input_to_idx()
@@ -95,7 +97,7 @@ class Euchre:
         self.current_player = self.players[self.current_player_idx]
 
     def increment_current_player(self):
-        self.set_current_player(self.current_player_idx + 1)
+        self.set_current_player(self.current_player_idx + 1 % N_PLAYERS)
 
     def get_current_player(self):
         return self.current_player_idx, self.current_player
@@ -126,7 +128,7 @@ class Euchre:
                 print("Game was quit.")
                 return
 
-            assert self.check_validity(trick, card_played)
+            assert check_validity(trick, card_played, player.hand)
             trick[player_idx] = card_played
             self.increment_current_player()
 
