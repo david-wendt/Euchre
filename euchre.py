@@ -97,7 +97,7 @@ class Euchre:
         self.current_player = self.players[self.current_player_idx]
 
     def increment_current_player(self):
-        self.set_current_player(self.current_player_idx + 1 % N_PLAYERS)
+        self.set_current_player((self.current_player_idx + 1) % N_PLAYERS)
 
     def get_current_player(self):
         return self.current_player_idx, self.current_player
