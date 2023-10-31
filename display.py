@@ -16,23 +16,27 @@ SUIT_SYMBOLS = {
 
 RANK_SYMBOLS = {rank: rank[0] if rank != '10' else rank for rank in RANKS}
 
-def display_card(card):
+def get_card_rep(card):
+    '''Returns the string representation for the card.'''
     if card is None: 
         return "[no card]"
     return RANK_SYMBOLS[card.rank] + SUIT_SYMBOLS[card.suit]
 
-def display_hand(hand):
-    return [display_card(card) for card in hand]
+def get_hand_rep(hand):
+    '''Returns a list of string representations for cards in the hand.'''
+    return [get_card_rep(card) for card in hand]
 
 def display_all_hands(players):
+    '''Prints all hands.'''
     for player in players:
-        print(player.name, display_hand(player.hand))
+        print(player.name, get_hand_rep(player.hand))
     print()
 
 def display_trick(players, trick, display_hands=True):
+    '''Prints all hands (optional) along with cards played in this trick.'''
     for player_idx,player in enumerate(players):
         print(player.name)
         if display_hands:
-            print("\tHAND:", display_hand(player.hand))
-        print("\tCARD PLAYED:", display_card(trick[player_idx]))
+            print("\tHAND:", get_hand_rep(player.hand))
+        print("\tCARD PLAYED:", get_card_rep(trick[player_idx]))
     print()

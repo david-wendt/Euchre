@@ -10,10 +10,42 @@ class Player:
         self.name = name
         self.hand = []
 
+    def card_input_to_idx(self):
+        hand_rep = dsp.get_hand_rep(self.hand)
+        card_str = input("Select a card by its number from [" + 
+                         ", ".join([card_rep + f" ({i+1})" for i,card_rep in enumerate(hand_rep)])
+                         + "]: ")
+        if card_str == "":
+            return 0
+        if card_str == "quit":
+            raise QuitGameException()
+        if card_str not in [str(i+1) for i in range(len(hand_rep))]:
+            return -1
+
+    def get_manual_card_choice(self):
+        card_idx = self.card_input_to_idx()
+        
+        while card_idx == -1:
+            print("Invalid card number! (Enter 'quit' to quit, or enter '' to choose the first card.)")
+            card_idx = self.card_input_to_idx()
+
+        return self.hand[card_idx]
+
+    def play_card_manual(self, trump_suit, trick, display_trick=True):
+        print("Trump suit is", trump_suit)
+        if display_trick:
+            print('Cards played:', dsp.get_hand_rep(trick))
+            
+        card = self.get_manual_card_choice()
+        while not check_validity(trick, card, self.hand):
+            print("Invalid card choice! Must follow suit!")
+            card = self.get_manual_card_choice()
+
+        self.hand.remove(card)
+        return card
+    
     def play_card(self, trump_suit, trick):
-        # card_idx = input("Select a card by its number: ")
         raise NotImplementedError()
-        # return card
 
 class Euchre:
     def __init__(self, player_names=None):
@@ -77,9 +109,6 @@ class Euchre:
                 card = self.deck.pop()
                 player.hand.append(card)
 
-    def check_validity(self, trick, card_played):
-        raise NotImplementedError()
-
     def play_trick(self, display=False):
         trick = [None for _ in range(N_PLAYERS)]
         for _ in range(N_PLAYERS):
@@ -87,9 +116,15 @@ class Euchre:
                 dsp.display_trick(self.players, trick)
 
             player_idx,player = self.get_current_player()
-            card_played = player.play_card(self.trump_suit, trick) # , self.hand_history) 
+            try:
+                card_played = player.play_card_manual(self.trump_suit, trick, False) 
+
+                # card_played = player.play_card(self.trump_suit, trick, self.hand_history)  
                 # The last arg above will throw an error as implemented. We need to figure out 
                 # what info needs to be passed to the player besides just the current trick
+            except QuitGameException:
+                print("Game was quit.")
+                return
 
             assert self.check_validity(trick, card_played)
             trick[player_idx] = card_played
