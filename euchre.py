@@ -113,7 +113,8 @@ class Euchre:
 
     def play_trick(self, display=False):
         trick = [None for _ in range(N_PLAYERS)]
-        for _ in range(N_PLAYERS):
+        for i in range(len(self.players)):
+            player = self.players[(self.players.index(self.trick_lead_player) + i) % len(self.players)]
             if display: 
                 dsp.display_trick(self.players, trick)
 
