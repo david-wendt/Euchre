@@ -50,7 +50,7 @@ class EuchreHand():
                 card = self.deck.pop()
                 player.hand.append(card)
 
-    def play_trick(self, display=False):
+    def play_trick(self, verbosity):
         trick = [None for _ in range(gl.N_PLAYERS)]
         player_idx = self.leading_player
         led_suit_cards = None 
@@ -58,15 +58,11 @@ class EuchreHand():
             player_idx = (self.leading_player + i) % gl.N_PLAYERS
             player = self.players[player_idx]
 
-            if display: 
+            if verbosity: 
                 dsp.display_trick(self.players, trick, self.tricks_won, self.contract_team)
 
             hand_state = HandState(trump_suit=self.trump_suit, trick=trick) # TODO: Make this a class? 
-            card_played = player.play_card(led_suit_cards, hand_state, False) 
-
-            # card_played = player.play_card(self.trump_suit, trick, self.hand_history)  
-            # The last arg above will throw an error as implemented. We need to figure out 
-            # what info needs to be passed to the player besides just the current trick
+            card_played = player.play_card(led_suit_cards, hand_state) 
 
             assert check_validity(card_played, led_suit_cards, player.hand)
 
@@ -83,7 +79,7 @@ class EuchreHand():
         winner = max(range(gl.N_PLAYERS), key=lambda i: robust_index(winning_suit_cards, trick[i]))
         self.tricks_won[gl.TEAM_OF_PLAYER[winner]] += 1
 
-        if display: 
+        if verbosity: 
             dsp.display_trick(self.players, trick, self.tricks_won, self.contract_team)
             print(f'Player {winner} won with {dsp.get_card_rep(trick[winner])}!\n')
 

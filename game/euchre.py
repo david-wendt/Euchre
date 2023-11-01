@@ -1,20 +1,13 @@
 import random
 
 from . import global_info as gl
-from . import display as dsp
-from .player import Player 
 from .bidding import Bidding
 from .euchre_hand import EuchreHand
 
 class Euchre:
-    def __init__(self, player_names=None, player_types=None, dealer=0, 
-                 points_to_win=gl.POINTS_TO_WIN, verbosity=0):
-        self.player_names = player_names if player_names is not None else ['P'+str(i) for i in range(gl.N_PLAYERS)]
-        self.player_types = player_types if player_types is not None else ['manual' for i in range(gl.N_PLAYERS)]
-        assert len(self.player_names) == gl.N_PLAYERS
-        assert len(self.player_types) == gl.N_PLAYERS
-        self.players = [Player(self.player_names[i], self.player_types[i]) for i in range(gl.N_PLAYERS)]
-
+    def __init__(self, players, dealer=0, points_to_win=gl.POINTS_TO_WIN, verbosity=0):
+        self.players = players 
+        assert len(self.players) == gl.N_PLAYERS
         self.dealer = dealer
         self.points_to_win = points_to_win
         self.team_points = [0 for _ in range(gl.N_TEAMS)]
