@@ -9,7 +9,7 @@ def test():
 
 def main():
     # players = [ManualAgent(f'Player {i}') for i in range(gl.N_PLAYERS)]
-    players = [RandomAgent(f'RandomAgent{i}') for i in range(gl.N_PLAYERS - 1)]
+    players = [RandomAgent(i) for i in range(gl.N_PLAYERS - 1)]
     players.append(ManualAgent('David'))
     game = Euchre(players, points_to_win=3, verbosity=2)
     game.play()

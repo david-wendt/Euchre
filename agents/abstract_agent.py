@@ -1,7 +1,7 @@
 class AbstractAgent():
     def __init__(self, agent_name):
         if isinstance(agent_name, int):
-            self.name = self.get_agent_type_str() + ' ' + str(agent_name)
+            self.name = self.get_agent_type_str() + str(agent_name)
         elif isinstance(agent_name, str):
             self.name = agent_name 
         else:
@@ -10,7 +10,7 @@ class AbstractAgent():
         self.hand = []
 
     def get_agent_type_str(self):
-        raise NotImplementedError('Trying to instantiate an AbstractAgent!')
+        raise NotImplementedError('Either did not implement get_agent_type_str for Agent subclass,\n\tor trying to instantiate an AbstractAgent!')
     
     def get_valid_cards(self, led_suit_cards):
         if led_suit_cards is None: 
