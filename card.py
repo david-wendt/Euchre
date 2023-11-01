@@ -6,6 +6,7 @@ from collections import namedtuple
 Card = namedtuple('Card', ['suit', 'rank'])
 
 def check_validity(card, led_suit_cards, hand):
+    print('WARNING: check_validity should not be necessary for game functionality and should only be used for double-checking.')
     if led_suit_cards is None: 
         return True
 

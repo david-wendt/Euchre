@@ -1,4 +1,5 @@
 import random 
+from collections import namedtuple
 
 import global_info as gl
 import display as dsp
@@ -10,6 +11,8 @@ def robust_index(ls: list, elt):
         return ls.index(elt)
     except ValueError:
         return -1
+
+HandState = namedtuple('HandState', ('trick', 'trump_suit'))
 
 class EuchreHand():
     def __init__(self, players, dealer, bidding_winner, trump_suit, 
@@ -58,7 +61,8 @@ class EuchreHand():
             if display: 
                 dsp.display_trick(self.players, trick, self.tricks_won, self.contract_team)
 
-            card_played = player.play_card_manual(led_suit_cards, self.trump_suit, trick, False) 
+            hand_state = HandState(trump_suit=self.trump_suit, trick=trick) # TODO: Make this a class? 
+            card_played = player.play_card(led_suit_cards, hand_state, False) 
 
             # card_played = player.play_card(self.trump_suit, trick, self.hand_history)  
             # The last arg above will throw an error as implemented. We need to figure out 
