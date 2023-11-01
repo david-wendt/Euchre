@@ -1,5 +1,5 @@
 import random 
-import global_info as gl 
+from . import global_info as gl 
 
 class Bidding():
     def run_bidding(self):

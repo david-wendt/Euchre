@@ -1,6 +1,6 @@
-import global_info as gl
-import display as dsp 
-from card import check_validity
+from . import global_info as gl
+from . import display as dsp 
+from .card import check_validity
 
 class Player:
     def __init__(self, name, player_type='manual'):

@@ -1,9 +1,9 @@
 import random 
 from collections import namedtuple
 
-import global_info as gl
-import display as dsp
-from card import Card, check_validity
+from . import global_info as gl
+from . import display as dsp
+from .card import Card, check_validity
 
 def robust_index(ls: list, elt):
     # Used for determining trick winner

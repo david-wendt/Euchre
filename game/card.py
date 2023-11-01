@@ -1,4 +1,4 @@
-from global_info import * 
+from .global_info import * 
 
 from collections import namedtuple
 

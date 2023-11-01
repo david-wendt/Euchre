@@ -1,8 +1,6 @@
-import global_info as gl 
-from card import Card
-from player import Player
-from euchre import Euchre
-from euchre_hand import EuchreHand
+import game.global_info as gl 
+from game.card import Card
+from game.euchre import Euchre
 
 def test():
     card1 = Card('Spades', 'Jack')

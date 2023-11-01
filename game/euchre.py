@@ -1,10 +1,10 @@
 import random
 
-import global_info as gl
-import display as dsp
-from player import Player 
-from bidding import Bidding
-from euchre_hand import EuchreHand
+from . import global_info as gl
+from . import display as dsp
+from .player import Player 
+from .bidding import Bidding
+from .euchre_hand import EuchreHand
 
 class Euchre:
     def __init__(self, player_names=None, player_types=None, dealer=0, 

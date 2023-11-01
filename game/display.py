@@ -1,4 +1,4 @@
-import global_info as gl
+from . import global_info as gl
 
 SUIT_SYMBOLS = {
     # White (non-filled) versions:
