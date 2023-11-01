@@ -1,16 +1,22 @@
 # CS238-Euchre-Project
 Final project for Stanford AA228/CS238 to make a Euchre-playing RL agent.
 
+# Next steps
+1. Test the implementation a bit to make sure nothing is wrong with it
+2. Think about what information we want to feed to (at least a first generation) AI model
+3. Rewrite some parts of the Euchre code to make sure that all the necessary information can be passed to the Player objects in `Player.play_card`.
+4. Think about what kind of model we want to use first. How will we featurize the requisite information?
+5. Write functions to featurize everything we need to pass to the first generation model.
+6. Implement the model
+7. Think about what benchmarks to use. Random choice of a valid card? Some simple deterministic strategy? Are two benchmarks enough?
+8. Train and evaluate the model against itself and against benchmarks
+9. Think about new models or improvements to the model and iterate through steps 2-8
+10. (Optional, probably unnecessary to get full credit for the project) Implement real bidding? Figure out how to train a model to do this as well? two separate models I'm assuming?
+
 # Potential project structure 
 
-Found this: https://github.com/datamllab/rlcard, but ngl i think this game is simple enough that it would be fun and educational to code up the environment ourselves. I am down to do this if nobody else wants to.
-
-## `game.py`
-1) Contains a `GameState` class to encode the state of the game (cards played, tricks won by which player, which player's turn it currently is, who won the bidding, etc)
-
-I was initially thinking of also having a `PlayerState` class to encode private info about each player, but in reality the only private info is their hand, right? So maybe just make the player hands an attribute of the `GameState` and don't feed it to the player/agent when giving them info to make their choice?
-
-2) Make a separate class/function, taking the `GameState` and all player agents as arguments, and making one turn at a time? Or just have a `take_turn` method of the `GameState` which takes the single active player agent as an argument?
+## `bidding`/`card`/`display`/`euchre`/`euchre_hand`/`global_info`/`player`.py
+Implements Euchre. Finished with all but bidding.
 
 ## `featurize.py`
 
