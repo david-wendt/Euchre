@@ -2,6 +2,18 @@ import random
 import numpy as np # I use this only for an np.argmax call, 
 # which in theory we could find another way to do or implement by hand with a few lines - DW
 
+
+'''
+Make Class for a Hand. Will play 5 tricks and return score. 
+Potential to keep track of bidding history. 
+
+Player class
+Euchre Class
+Hand class
+Card_deck class. 
+
+'''
+
 from card_info import * 
 import display as dsp
 
@@ -11,6 +23,7 @@ class Player:
         self.hand = []
 
     def card_input_to_idx(self):
+        # This should probably be a loop that goes until it receives satsifactory answer.
         hand_rep = dsp.get_hand_rep(self.hand)
         card_str = input("Select a card by its number from [" + 
                          ", ".join([card_rep + f" ({i+1})" for i,card_rep in enumerate(hand_rep)])
