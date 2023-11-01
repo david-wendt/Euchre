@@ -1,4 +1,4 @@
-from card_info import * 
+import global_info as gl
 
 SUIT_SYMBOLS = {
     # White (non-filled) versions:
@@ -14,7 +14,7 @@ SUIT_SYMBOLS = {
     'Spades': '\u2660'
 }
 
-RANK_SYMBOLS = {rank: rank[0] if rank != '10' else rank for rank in RANKS}
+RANK_SYMBOLS = {rank: rank[0] if rank != '10' else rank for rank in gl.RANKS}
 
 def get_card_rep(card):
     '''Returns the string representation for the card.'''
@@ -32,11 +32,14 @@ def display_all_hands(players):
         print(player.name, get_hand_rep(player.hand))
     print()
 
-def display_trick(players, trick, display_hands=True):
+def display_trick(players, trick, tricks_won, contract_team, display_hands=True):
     '''Prints all hands (optional) along with cards played in this trick.'''
     for player_idx,player in enumerate(players):
         print(player.name)
         if display_hands:
             print("\tHAND:", get_hand_rep(player.hand))
         print("\tCARD PLAYED:", get_card_rep(trick[player_idx]))
+    
+    print(f'Team of Players {contract_team} and {contract_team + 2} won the contract.')
+    print(f"TRICKS WON: Players 0 and 2: {tricks_won[0]}, Players 1 and 3: {tricks_won[1]}'")
     print()
