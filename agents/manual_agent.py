@@ -1,3 +1,5 @@
+import random 
+
 from game import global_info as gl
 from game import display as dsp 
 from game.card import check_validity
@@ -14,11 +16,11 @@ class ManualAgent(AbstractAgent):
                          ", ".join([card_rep + f" ({i+1})" for i,card_rep in enumerate(valid_cards_rep)])
                          + "]: ")
         if card_str == "":
-            return valid_cards[0]
+            return random.choice(valid_cards)
         if card_str == "quit":
             raise gl.QuitGameException()
         if card_str not in [str(i+1) for i in range(len(valid_cards))]:
-            print("Invalid card number! (Enter 'quit' to quit, or enter '' to choose the first valid card.)")
+            print("Invalid card number! (Enter 'quit' to quit, or enter '' to choose a random valid card.)")
             return self.get_manual_card_choice(valid_cards)
         
         card_idx = int(card_str) - 1
@@ -26,6 +28,6 @@ class ManualAgent(AbstractAgent):
 
     def choose_card(self, valid_cards, hand_state):
         trump_suit, trick = hand_state.trump_suit, hand_state.trick
-        print("Your turn,", self.name, "!\nTrump suit is", trump_suit)
-        print('Cards played:', dsp.get_hand_rep(trick))
+        print("\nYour turn,", self.name, "!\nTrump suit is", trump_suit)
+        dsp.display_trick(trick)
         return self.get_manual_card_choice(valid_cards)

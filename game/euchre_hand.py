@@ -3,7 +3,7 @@ from collections import namedtuple
 
 from . import global_info as gl
 from . import display as dsp
-from .card import Card, check_validity
+from .card import Card
 
 def robust_index(ls: list, elt):
     # Used for determining trick winner
@@ -18,6 +18,7 @@ class EuchreHand():
     def __init__(self, players, dealer, bidding_winner, trump_suit, 
                  bidding_history=None, verbosity=0):
         self.players = players 
+        self.player_names = [player.name for player in self.players]
         self.leading_player = (dealer + 1) % gl.N_PLAYERS
         self.contract_team = gl.TEAM_OF_PLAYER[bidding_winner]
         self.trump_suit = trump_suit
@@ -54,17 +55,19 @@ class EuchreHand():
         trick = [None for _ in range(gl.N_PLAYERS)]
         player_idx = self.leading_player
         led_suit_cards = None 
+
+        if verbosity:
+            dsp.display_contract_status(self.contract_team, self.player_names)
+
         for i in range(gl.N_PLAYERS):
             player_idx = (self.leading_player + i) % gl.N_PLAYERS
             player = self.players[player_idx]
 
-            if verbosity: 
-                dsp.display_trick(self.players, trick, self.tricks_won, self.contract_team)
+            if verbosity > 2: 
+                dsp.display_all_hands(self.players)
 
             hand_state = HandState(trump_suit=self.trump_suit, trick=trick) # TODO: Make this a class? 
             card_played = player.play_card(led_suit_cards, hand_state) 
-
-            assert check_validity(card_played, led_suit_cards, player.hand)
 
             if player_idx == self.leading_player:
                 led_suit_cards = self.suit_cards[card_played.suit]
@@ -80,8 +83,9 @@ class EuchreHand():
         self.tricks_won[gl.TEAM_OF_PLAYER[winner]] += 1
 
         if verbosity: 
-            dsp.display_trick(self.players, trick, self.tricks_won, self.contract_team)
-            print(f'Player {winner} won with {dsp.get_card_rep(trick[winner])}!\n')
+            dsp.display_trick(trick, player_names=self.player_names, leader=self.leading_player)
+            print(f'{self.player_names[winner]} won with {dsp.get_card_rep(trick[winner])}!\n')
+            dsp.display_hand_status(self.tricks_won, self.player_names)
 
         return winner
 

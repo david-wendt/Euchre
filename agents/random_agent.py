@@ -1,8 +1,6 @@
 import random 
+from .abstract_agent import AbstractAgent
 
-class RandomAgent():
-    def __init__(self):
-        pass 
-
-    def play_card(self, valid_cards):
+class RandomAgent(AbstractAgent):
+    def choose_card(self, valid_cards, hand_state):
         return random.choice(valid_cards)
