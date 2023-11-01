@@ -143,7 +143,7 @@ class Euchre:
             'Clubs': 'Spades',
             'Diamonds': 'Hearts'
         }
-        is_little_jack = card.rank = 'Jack' and card.suit == matching_suit[self.trump_suit]
+        is_little_jack = card.rank == 'Jack' and card.suit == matching_suit[self.trump_suit]
         return card.suit == self.trump_suit or is_little_jack
 
     def card_value(self, card):
