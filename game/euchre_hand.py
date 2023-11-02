@@ -6,15 +6,28 @@ from . import display as dsp
 from .card import Card
 
 def robust_index(ls: list, elt):
-    # Used for determining trick winner
+    ''' 
+    Utility function used for determining trick winner.
+    
+    Identical to Python's native list.index(), but returns -1
+    upon not finding the element instead of throwing a ValueError.
+    '''
     try: 
         return ls.index(elt)
     except ValueError:
         return -1
 
+''' NamedTuple for state of the hand to include the cards played in the trick and the trump suit. '''
 HandState = namedtuple('HandState', ('trick', 'trump_suit'))
 
 class EuchreHand():
+    ''' 
+    Class to run a hand of Euchre.
+    
+    Stores references to all players, stores the state of the hand and the
+    state of each trick within the hand, and can loop through tricks
+    and evaluate who won the hand and how many points they win.
+    '''
     def __init__(self, players, dealer, bidding_winner, trump_suit, 
                  bidding_history=None, verbosity=0):
         self.players = players 
@@ -30,11 +43,16 @@ class EuchreHand():
         self.deal_cards()
 
     def initialize_deck(self):
+        ''' Set up the deck and shuffle it. '''
         self.deck = [Card(suit=suit, rank=rank) for suit in gl.SUITS for rank in gl.RANKS]
         random.shuffle(self.deck)
 
     def initialize_suits(self):
-        # The cards should be in rank order for all suits, including trump.
+        '''
+        Set up the suits for the hand. Copy the default suits, then move both 
+        Jacks to the trump suit and make sure the order of cards within each suit is correct
+        (including in the trump suit with the two Jacks).
+        '''
         print('WARNING: This suit-card-list computation should probably be cached once ahead of time instead of computed once per hand...')
         suit_cards = {suit: [Card(suit, rank) for rank in gl.RANKS] for suit in gl.SUITS}
         trump_suit = self.trump_suit
@@ -46,12 +64,22 @@ class EuchreHand():
         self.suit_cards = suit_cards
 
     def deal_cards(self):
+        ''' Deal out cards to the players. '''
         for _ in range(gl.HAND_SIZE):
             for player in self.players:
                 card = self.deck.pop()
                 player.hand.append(card)
+        # TODO: Maybe sort the cards by suit in each player's hand?
+        # Or perhaps do that in display.py when get_hand_rep is called?
 
     def play_trick(self, verbosity):
+        ''' 
+        Play a single trick, looping through players to receive
+        card choices, and then determine the winner. 
+
+        return: 
+            winner (int): player index (0-3) of the winner of the trick
+        '''
         trick = [None for _ in range(gl.N_PLAYERS)]
         player_idx = self.leading_player
         led_suit_cards = None 
@@ -85,12 +113,19 @@ class EuchreHand():
         if verbosity: 
             dsp.display_trick(trick, player_names=self.player_names, leader=self.leading_player)
             print(f'{self.player_names[winner]} won with {dsp.get_card_rep(trick[winner])}!\n')
-            dsp.display_hand_status(self.tricks_won, self.player_names)
+            dsp.display_tricks_won(self.tricks_won, self.player_names)
 
         return winner
 
     def play_hand(self):
-        for _ in range(5):
+        '''
+        Main function to play a hand and loop through five tricks.
+
+        return: 
+            winning_team (int): index (0 or 1) of the winning team
+            points (int): number of points won by th ewinning team
+        '''
+        for _ in range(gl.HAND_SIZE):
             self.leading_player = self.play_trick(self.verbosity)
 
         winning_team = max(range(gl.N_TEAMS), key=lambda i: self.tricks_won[i])

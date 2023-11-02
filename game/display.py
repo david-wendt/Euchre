@@ -33,13 +33,20 @@ def display_all_hands(players):
     print()
 
 def display_contract_status(contract_team, player_names):
+    ''' Prints the team who won the contract. '''
     print(f'Team of {player_names[contract_team]} and {player_names[contract_team + 2]} won the contract.')
 
-def display_hand_status(tricks_won, player_names):
+def display_tricks_won(tricks_won, player_names):
+    ''' Print the number of tricks won by each team. '''
     print(f"TRICKS WON: \n\t{player_names[0]} & {player_names[2]}: {tricks_won[0]}\n\t{player_names[1]} & {player_names[3]}: {tricks_won[1]}'")
     print()
 
 def display_trick(trick, player_names=None, leader=None):
+    ''' 
+    Display the cards played so far in a single trick.
+    (Optional: Include the names of the players who played each card,
+    and the player who led the trick.) 
+    '''
     assert len(trick) == gl.N_PLAYERS
 
     if player_names is None:

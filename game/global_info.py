@@ -1,3 +1,8 @@
+'''
+Define some necessary global constants for the game 
+which are the same across all games and hands.
+'''
+
 N_PLAYERS = 4
 N_TEAMS = 2
 HAND_SIZE = 5
@@ -21,6 +26,7 @@ TEAM_OF_PLAYER = {
 POINTS_TO_WIN = 10
 
 class QuitGameException(Exception): 
+    ''' Exception used to quit early when playing manually from the command line. '''
     def __init__(self):            
         # Call the base class constructor with the parameters it needs
         super().__init__('Game was quit!')
