@@ -4,7 +4,7 @@ Final project for Stanford AA228/CS238 to make a Euchre-playing RL agent.
 # Next steps
 1. Test the implementation a bit to make sure nothing is wrong with it
 2. Think about what information we want to feed to (at least a first generation) AI model
-3. Rewrite some parts of the Euchre code to make sure that all the necessary information can be passed to the Player objects in `Player.play_card`.
+3. Rewrite some parts of the Euchre code to make sure that all the necessary information can be passed to the Agent objects via `player.play_card` in `game/euchre_hand.py`.
 4. Think about what kind of model we want to use first. How will we featurize the requisite information?
 5. Write functions to featurize everything we need to pass to the first generation model.
 6. Implement the model
@@ -15,15 +15,25 @@ Final project for Stanford AA228/CS238 to make a Euchre-playing RL agent.
 
 # Potential project structure 
 
-## `bidding`/`card`/`display`/`euchre`/`euchre_hand`/`global_info`/`player`.py
+## `game` (folder)
+
 Implements Euchre. Finished with all but bidding.
 
-## `featurize.py`
+## `agents` (folder)
+
+One file to implement each agent. Manual and random implemented so far, baseline deterministic outlined. Need to implement varous AI/RL models here.
+
+ Maybe try Q-learning (probably shallow with features rather than enumerating all states) and then deep Q-learning? See if any other algs introduced in class are applicable? Perhaps the POMDP version of rollout lookahead or something as a baseline?
+
+
+## `featurize`
+
+Make a folder called `featurize` and include one or more files to featurize various properties of the game state? See next paragraph for ideas on functions.
 
 Contains a `featurize_game_state` function (which maybe calls helper functions to featurize various parts of the game state) as well as a `featurize_hand` to create feature vectors to pass to our RL agents
-- maybe length-52 vector (or, you know, length-n where n is the number of cards in the game. 26? 24?) with 1's in the position of the cards in the hand and 0's elsewhere? I am guessing that just indexing all cards with a single number will be too difficult for a simple RL algorithm to learn, but at the same time
-- perhaps, for game state cards played, have a single length-n vector with 1's in the positions of all cards that have been played and separately just one integer per team saying how many tricks won? And then possibly later encoding which players played which cards as part of which tricks?
+- maybe length-24 vector with 1's in the position of the cards in the hand and 0's elsewhere? I am guessing that just indexing all cards with a single number will be too difficult for a simple RL algorithm to learn. Maybe a good compromise is a 1-hot length-4 vector with the suit, plus an additional single element for the rank, for each card? So 5 entries dedicated to each card? Easier to specify the cards in the hand that way, but harder to represent the set of all cards previously played, for which it would be easier to just have a length-24 vector initialized to 0's where 1's get filled in as tricks get played.
+- Would need more complicated features if we want to specify which cards were played as part of which tricks or by which players, but I'd guess we don't quite need that, at least in the beginning.
 
-## `agent.py`
+## `evaluate`
 
-Write up our RL agent here. Maybe first try Q-learning (probably shallow with features rather than enumerating all states) and then deep Q-learning? See if any other algs introduced in class are applicable?
+Probably need some evaluation functions to run the game many times with various combinations of agents to get statistics on win rates
