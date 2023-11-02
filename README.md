@@ -34,7 +34,7 @@ Contains a `featurize_game_state` function (which maybe calls helper functions t
 - maybe length-24 vector with 1's in the position of the cards in the hand and 0's elsewhere? I am guessing that just indexing all cards with a single number will be too difficult for a simple RL algorithm to learn. Maybe a good compromise is a 1-hot length-4 vector with the suit, plus an additional single element for the rank, for each card? So 5 entries dedicated to each card? Easier to specify the cards in the hand that way, but harder to represent the set of all cards previously played, for which it would be easier to just have a length-24 vector initialized to 0's where 1's get filled in as tricks get played.
 - Would need more complicated features if we want to specify which cards were played as part of which tricks or by which players, but I'd guess we don't quite need that, at least in the beginning.
 
-I suppose we could put a method in AbstractAgent to featurize each agent's hand individually, and a method in EuchreHand to featurize the state of the hand, but I think it would be better organization to have featurizing functions in a separate place. I'm not tied to this structure though. 
+I suppose we could put a method in `AbstractAgent` to featurize each agent's hand individually, and a method in `EuchreHand` to featurize the state of the hand, but I think it would be better organization to have featurizing functions in a separate place. I'm not tied to this structure though. 
 
 ## `evaluate`
 
