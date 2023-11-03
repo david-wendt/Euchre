@@ -41,5 +41,15 @@ class ManualAgent(AbstractAgent):
         ''' Function to choose from a list of valid cards. Called by play_card in AbstractAgent. '''
         trump_suit, trick = hand_state.trump_suit, hand_state.trick
         print("\nYour turn,", self.name, "!\nTrump suit is", trump_suit)
+        print('Your hand:', dsp.get_hand_rep(self.hand))
         dsp.display_trick(trick)
         return self.get_manual_card_choice(legal_cards)
+    
+    def reward(self,reward):
+        ''' Receive a reward of `reward`. '''
+        if reward > 0:
+            print(f'Congratulations! You\'ve received a reward of {reward} point(s)!')
+        else:
+            print(f'Oh no! You\'ve lost {reward} point(s)!')
+        self.score = reward + self.gamma * self.score 
+        print("Your total score is:", self.score)

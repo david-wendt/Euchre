@@ -98,7 +98,13 @@ class EuchreHand():
             card_played = player.play_card(led_suit_cards, hand_state) 
 
             if player_idx == self.leading_player:
-                led_suit_cards = self.suit_cards[card_played.suit]
+                # Extra jack logic here to prevent needing to search through the suit lists every trick
+                if card_played.rank != 'Jack':
+                    led_suit_cards = self.suit_cards[card_played.suit]
+                elif card_played.suit in [self.trump_suit, gl.MATCHING_SUITS[self.trump_suit]]:
+                    led_suit_cards = self.suit_cards[self.trump_suit]
+                else:
+                    led_suit_cards = self.suit_cards[card_played.suit]
 
             trick[player_idx] = card_played
 
@@ -114,6 +120,12 @@ class EuchreHand():
             dsp.display_trick(trick, player_names=self.player_names, leader=self.leading_player)
             print(f'{self.player_names[winner]} won with {dsp.get_card_rep(trick[winner])}!\n')
             dsp.display_tricks_won(self.tricks_won, self.player_names)
+
+        for player_idx in range(gl.N_PLAYERS):
+            if gl.TEAM_OF_PLAYER[player_idx] == gl.TEAM_OF_PLAYER[winner]:
+                self.players[player_idx].reward(1) # Reward 1 if your team wins the trick
+            else:
+                self.players[player_idx].reward(-1) # Reward -1 if your team loses the trick
 
         return winner
 
@@ -140,5 +152,9 @@ class EuchreHand():
         else:
             # Non-contract team wins
             points = 2
+
+        for player_idx in range(gl.N_PLAYERS):
+            if gl.TEAM_OF_PLAYER[player_idx] == winning_team:
+                self.players[player_idx].reward(10*points) # Reward 10*points if your team wins the hand
 
         return winning_team, points 

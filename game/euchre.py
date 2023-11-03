@@ -41,5 +41,9 @@ class Euchre:
             print(f'Congratulations! Players {self.player_names[winning_team]} & {self.player_names[winning_team + 2]} win!')
             print(f'Final Score:\n\t{self.player_names[0]} & {self.player_names[2]}: {self.team_points[0]}\n\t{self.player_names[1]} & {self.player_names[3]}: {self.team_points[1]}')
             print()
+
+        for player_idx in range(gl.N_PLAYERS):
+            if gl.TEAM_OF_PLAYER[player_idx] == winning_team:
+                self.players[player_idx].reward(100) # Reward 100 if your team wins the game
         
         return winning_team

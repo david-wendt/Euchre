@@ -24,6 +24,9 @@ def get_card_rep(card):
 
 def get_hand_rep(hand):
     '''Returns a list of string representations for cards in the hand.'''
+    if hand is None:
+        return []
+    
     return [get_card_rep(card) for card in hand]
 
 def display_all_hands(players):
