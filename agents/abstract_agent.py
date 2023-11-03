@@ -31,8 +31,6 @@ class AbstractAgent():
         if led_suit_cards is None: 
             return self.hand 
         
-        print('BUG: Little Jack does not force players to play trump! \
-              (But I /am/ forced to play little jack if trump is led?)')
         led_suit_cards_in_hand = set(led_suit_cards).intersection(self.hand)
         if len(led_suit_cards_in_hand) > 0:
             return list(led_suit_cards_in_hand)
